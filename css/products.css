@@ -55,6 +55,7 @@
   opacity: 0.5;
 }
 
+/* Card Gradient Overlay */
 .product-card__img-wrap::after {
   content: '';
   position: absolute;
@@ -94,12 +95,18 @@
   display: flex;
   gap: 0.5rem;
   width: 100%;
+  flex-wrap: nowrap;
 }
 
 .product-card__overlay-actions .btn {
   flex: 1;
-  font-size: 0.6rem;
-  padding: 0.7rem 1rem;
+  font-size: 0.58rem;
+  padding: 0.65rem 0.5rem;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.12em;
 }
 
 .product-card__badge {

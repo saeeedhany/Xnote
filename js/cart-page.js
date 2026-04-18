@@ -1,3 +1,5 @@
+var SHEETS_ENDPOINT = ''; /* ← WEB APP URL*/
+
 /* Render cart items on the page */
 window.renderPageCart = function () {
   var items    = XNOTE.cart.readCart();
@@ -41,7 +43,7 @@ window.renderPageCart = function () {
           '<div class="cp-item__name">' + p.name + '</div>' +
           '<div class="cp-item__meta">' + item.size + ' · $' + price + ' each</div>' +
           '<div class="cp-item__qty">' +
-            '<button class="cp-qty-btn" onclick="XNOTE.cart.changeQty(\'' + item.key + '\',-1)">−</button>' +
+            '<button class="cp-qty-btn" onclick="XNOTE.cart.changeQty(\'' + item.key + '\',-1)">&#8722;</button>' +
             '<span class="cp-qty-num">' + item.qty + '</span>' +
             '<button class="cp-qty-btn" onclick="XNOTE.cart.changeQty(\'' + item.key + '\',1)">+</button>' +
           '</div>' +
@@ -54,7 +56,7 @@ window.renderPageCart = function () {
     );
   }).join('');
 
-  if (subEl)    subEl.textContent  = '$' + total;
+  if (subEl)    subEl.textContent   = '$' + total;
   if (totalEl)  totalEl.textContent = '$' + total;
   if (totalsEl) totalsEl.style.display = 'block';
 };
@@ -95,23 +97,58 @@ window.renderRecommended = function () {
   });
 };
 
+/* Save order to Google Sheets (silent, async) */
+function saveOrderToSheets(orderData) {
+  if (!SHEETS_ENDPOINT) return;
+
+  var items = XNOTE.cart.readCart().map(function (item) {
+    var p = XNOTE.products.find(function (x) { return x.id === item.id; });
+    if (!p) return '';
+    var price = XNOTE.getPriceForSize(p, item.size);
+    return p.name + ' (' + item.size + ') x' + item.qty + ' = $' + (price * item.qty);
+  }).filter(Boolean).join(' | ');
+
+  var payload = {
+    name:     orderData.name,
+    phone:    orderData.phone,
+    address:  orderData.address,
+    shipping: orderData.shipping || 'Standard Delivery',
+    payment:  orderData.payment  || 'Via WhatsApp',
+    items:    items,
+    total:    XNOTE.cart.getTotal(),
+    notes:    orderData.notes || '',
+  };
+
+  fetch(SHEETS_ENDPOINT, {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body:    JSON.stringify(payload),
+    mode:    'no-cors',
+  }).catch(function () { /* silent */ });
+}
+
 /* WhatsApp order button */
 function initWhatsAppBtn() {
   var btn = document.getElementById('wa-btn');
   if (!btn) return;
 
   btn.addEventListener('click', function () {
-    var name     = (document.getElementById('c-name').value     || '').trim();
-    var phone    = (document.getElementById('c-phone').value    || '').trim();
-    var address  = (document.getElementById('c-address').value  || '').trim();
-    var notes    = (document.getElementById('c-notes').value    || '').trim();
+    var name    = (document.getElementById('c-name').value    || '').trim();
+    var phone   = (document.getElementById('c-phone').value   || '').trim();
+    var address = (document.getElementById('c-address').value || '').trim();
+    var notes   = (document.getElementById('c-notes').value   || '').trim();
+
     var shipping = '';
     var shipSel  = document.querySelector('input[name="shipping"]:checked');
     if (shipSel) shipping = shipSel.value;
 
+    var payment = '';
+    var paymentSel = document.querySelector('input[name="payment"]:checked');
+    if (paymentSel) payment = paymentSel.value;
+
     if (!name || !phone || !address) {
       XNOTE.ui.toast('Please fill in your name, phone and address first');
-      (document.getElementById('c-name') || {}).focus && document.getElementById('c-name').focus();
+      document.getElementById('c-name').focus();
       return;
     }
     if (XNOTE.cart.readCart().length === 0) {
@@ -119,22 +156,13 @@ function initWhatsAppBtn() {
       return;
     }
 
-    /* Silently submit to Formspree if endpoint is set */
-    try {
-      var fs = document.getElementById('formspree-form');
-      if (fs && fs.action && !fs.action.includes('YOUR_FORM_ID')) {
-        document.getElementById('fs-name').value    = name;
-        document.getElementById('fs-phone').value   = phone;
-        document.getElementById('fs-address').value = address;
-        document.getElementById('fs-order').value   = XNOTE.cart.getCartSummary();
-        document.getElementById('fs-total').value   = '$' + XNOTE.cart.getTotal();
-        document.getElementById('fs-shipping').value= shipping;
-        document.getElementById('fs-notes').value   = notes;
-        fetch(fs.action, { method: 'POST', body: new FormData(fs), headers: { Accept: 'application/json' } });
-      }
-    } catch (err) { /* silent */ }
+    var orderData = { name: name, phone: phone, address: address, notes: notes, shipping: shipping, payment: payment };
 
-    XNOTE.cart.openWhatsApp({ name: name, phone: phone, address: address, notes: notes, shipping: shipping });
+    /* 1. Save to Google Sheets silently in background */
+    saveOrderToSheets(orderData);
+
+    /* 2. Open WhatsApp with full order details */
+    XNOTE.cart.openWhatsApp(orderData);
   });
 }
 
@@ -145,7 +173,6 @@ document.addEventListener('DOMContentLoaded', function () {
   window.renderRecommended();
   initWhatsAppBtn();
 
-  /* Clear cart button */
   var clearBtn = document.getElementById('clear-cart-btn');
   if (clearBtn) {
     clearBtn.addEventListener('click', function () {
@@ -157,7 +184,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  /* Footer links */
   var fp = document.getElementById('footer-products');
   if (fp) {
     fp.innerHTML = XNOTE.products.map(function (p) {

@@ -79,6 +79,7 @@ XNOTE.cart = (function () {
     writeWish(list);
     _syncWishButtons();
     _bump('[data-wish-count]');
+    _refreshPageCartIfPresent();
     return list.includes(productId);
   }
 

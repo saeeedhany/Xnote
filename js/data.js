@@ -1,7 +1,7 @@
 window.XNOTE = window.XNOTE || {};
 
-/* WhatsApp number */
-XNOTE.whatsappNumber = '201027575715';
+/* Whatsapp Number*/
+XNOTE.whatsappNumber = '201000000000';
 
 /* Products */
 XNOTE.products = [
@@ -18,7 +18,7 @@ XNOTE.products = [
       { label: '50ml',  price: 185 },
       { label: '100ml', price: 290 },
     ],
-    image: 'assets/images/perfume.png',
+    image: null,        /* ← to: 'assets/images/nuit-doree.jpg' */
     featured: true,
     isUnique: true,
   },
@@ -35,7 +35,7 @@ XNOTE.products = [
       { label: '50ml',  price: 165 },
       { label: '100ml', price: 260 },
     ],
-    image: null,
+    image: null,        /* ← to: 'assets/images/ambre-blanc.jpg' */
     featured: false,
     isUnique: false,
   },
