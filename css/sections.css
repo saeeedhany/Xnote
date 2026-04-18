@@ -866,3 +866,75 @@ textarea.form-control {
   .about-strip__text .section-header { text-align: center; }
   .about-strip__stats { justify-content: center; }
 }
+
+/* ── Hero logo (replaces text title) ────────────────────── */
+.hero__logo-wrap { margin: 1rem 0 1.6rem; }
+.hero__logo-img  {
+  height: clamp(120px, 18vw, 200px);
+  width: auto;
+  filter: drop-shadow(0 0 40px rgba(201,169,110,.25));
+}
+
+/* ── Section CTA row ─────────────────────────────────────── */
+.section-cta { text-align: center; margin-top: 3rem; }
+
+/* ── About strip visual inner ────────────────────────────── */
+.about-strip__visual-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, #181410, #080808);
+}
+
+.about-strip__logo {
+  height: 100px;
+  width: auto;
+  opacity: 0.35;
+  filter: drop-shadow(0 0 20px rgba(201,169,110,.2));
+}
+
+/* ── Section header left-aligned variant ─────────────────── */
+.section-header--left { text-align: left; }
+.section-header--left .section-header__label { text-align: left; }
+.section-header--left .section-header__title { text-align: left; }
+.section-header--left .section-header__sub   { text-align: left; margin-left: 0; }
+
+/* ── Cart page title ─────────────────────────────────────── */
+.cart-page__title {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: 0.04em;
+}
+
+/* ── Footer logo img ─────────────────────────────────────── */
+.footer__logo-img { height: 40px; width: auto; }
+
+/* ── Review modal spacing ────────────────────────────────── */
+.review-modal__label  { margin-bottom: 0.6rem; }
+.review-modal__title  {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  font-weight: 300;
+  color: var(--ivory);
+  margin-bottom: 1.5rem;
+}
+.review-modal__submit { width: 100%; margin-top: 0.5rem; }
+
+/* ── Modal action buttons ────────────────────────────────── */
+.modal__actions       { display: flex; gap: 0.6rem; }
+.modal__action-cart   { flex: 1; }
+.modal__action-wish   { flex: 0 0 auto; padding: 0.9rem 1.2rem; }
+
+/* ── Modal notes layout ──────────────────────────────────── */
+.modal__notes         { margin-bottom: 1.4rem; }
+.modal__notes-list    { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+
+/* ── Page hero (used on collection + cart pages) ──────────── */
+.page-hero { padding-top: var(--nav-h); background: var(--ink); border-bottom: 1px solid var(--border); }
+.page-hero__inner { padding-block: 5rem 4rem; text-align: center; }
+.page-hero__label { margin-bottom: 0.8rem; }
+.page-hero__title { font-family: var(--serif); font-size: clamp(2.5rem,6vw,5rem); font-weight: 300; line-height: 1; letter-spacing: 0.05em; margin-bottom: 1rem; }

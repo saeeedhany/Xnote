@@ -1,4 +1,3 @@
-/* ── Products Grid ──────────────────────────────────────── */
 .products-grid {
   display: grid;
   gap: 2px;
@@ -12,7 +11,6 @@
   grid-template-columns: repeat(4, 1fr);
 }
 
-/* ── Product Card ───────────────────────────────────────── */
 .product-card {
   position: relative;
   background: var(--surface);
@@ -27,7 +25,6 @@
   z-index: 2;
 }
 
-/* ── Image Wrap ─────────────────────────────────────────── */
 .product-card__img-wrap {
   position: relative;
   aspect-ratio: 3 / 4;
@@ -58,7 +55,6 @@
   opacity: 0.5;
 }
 
-/* ── Card Gradient Overlay ──────────────────────────────── */
 .product-card__img-wrap::after {
   content: '';
   position: absolute;
@@ -76,7 +72,6 @@
   opacity: 1;
 }
 
-/* ── Quick Order Overlay ────────────────────────────────── */
 .product-card__overlay {
   position: absolute;
   inset: 0;
@@ -107,7 +102,6 @@
   padding: 0.7rem 1rem;
 }
 
-/* ── Badge ──────────────────────────────────────────────── */
 .product-card__badge {
   position: absolute;
   top: 1rem;
@@ -115,7 +109,6 @@
   z-index: 4;
 }
 
-/* ── Wishlist Heart ─────────────────────────────────────── */
 .product-card__wish {
   position: absolute;
   top: 1rem;
@@ -170,7 +163,6 @@
   stroke-width: 1.5;
 }
 
-/* ── Product Info ───────────────────────────────────────── */
 .product-card__info {
   padding: 1.3rem 1.5rem 1.6rem;
   border-top: 1px solid var(--border);
@@ -233,7 +225,6 @@
   margin-top: 0.2rem;
 }
 
-/* ── Product Quick-View Modal ───────────────────────────── */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -363,7 +354,6 @@
   flex: 1;
 }
 
-/* ── Category Filter Tabs ───────────────────────────────── */
 .filter-tabs {
   display: flex;
   gap: 0.4rem;
@@ -397,7 +387,6 @@
   border-color: var(--gold);
 }
 
-/* ── Responsive ─────────────────────────────────────────── */
 @media (max-width: 1100px) {
   .products-grid--full { grid-template-columns: repeat(3, 1fr); }
 }
@@ -413,7 +402,6 @@
   .modal { max-height: 100vh; margin-top: auto; }
 }
 
-/* ── Size Selector (in modal) ───────────────────────────── */
 .modal__sizes-label {
   font-size: 0.58rem;
   letter-spacing: 0.28em;
@@ -451,7 +439,6 @@
   color: var(--obsidian);
 }
 
-/* ── Review Modal ───────────────────────────────────────── */
 .star-input {
   font-size: 1.4rem;
   color: var(--border-light);
@@ -471,7 +458,6 @@
   margin-bottom: 1.2rem;
 }
 
-/* ── WhatsApp CTA ───────────────────────────────────────── */
 .btn--whatsapp {
   background: #25D366;
   color: #fff;
@@ -489,7 +475,6 @@
 
 .btn--whatsapp svg { width: 18px; height: 18px; flex-shrink: 0; }
 
-/* ── Payment options ────────────────────────────────────── */
 .payment-options {
   display: flex;
   flex-direction: column;
