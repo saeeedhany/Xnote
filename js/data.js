@@ -1,7 +1,7 @@
 window.XNOTE = window.XNOTE || {};
 
 /* WhatsApp number */
-XNOTE.whatsappNumber = '201000000000';
+XNOTE.whatsappNumber = '201027575715';
 
 /* Products */
 XNOTE.products = [
