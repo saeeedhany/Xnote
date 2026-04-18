@@ -1,0 +1,424 @@
+/* ── CSS Custom Properties ──────────────────────────────── */
+:root {
+  /* Colors */
+  --obsidian:     #080808;
+  --ink:          #0f0f0f;
+  --surface:      #141414;
+  --surface-2:    #1a1a1a;
+  --border:       #252525;
+  --border-light: #2e2e2e;
+  --gold:         #c9a96e;
+  --gold-light:   #e8d5b0;
+  --gold-dim:     #8a6f40;
+  --gold-glow:    rgba(201, 169, 110, 0.15);
+  --ivory:        #f5f0e8;
+  --ivory-dim:    #cfc8bc;
+  --muted:        #5a5550;
+  --muted-2:      #7a7570;
+  --error:        #c0392b;
+  --success:      #6b8c5a;
+
+  /* Typography */
+  --serif:   'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --sans:    'Jost', system-ui, sans-serif;
+
+  /* Spacing */
+  --sp-xs:  0.4rem;
+  --sp-sm:  0.8rem;
+  --sp-md:  1.6rem;
+  --sp-lg:  3.2rem;
+  --sp-xl:  6rem;
+  --sp-2xl: 10rem;
+
+  /* Layout */
+  --max-w: 1280px;
+  --nav-h: 80px;
+
+  /* Transitions */
+  --ease:        cubic-bezier(0.25, 0.1, 0.1, 1.0);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --t-fast:  0.2s;
+  --t-med:   0.4s;
+  --t-slow:  0.7s;
+  --t-xl:    1.0s;
+
+  /* Shadows */
+  --shadow-gold: 0 0 40px rgba(201, 169, 110, 0.12);
+  --shadow-card: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* ── Reset ──────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--obsidian);
+  color: var(--ivory);
+  font-family: var(--sans);
+  font-weight: 300;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+img, svg, video {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+/* ── Film Grain Overlay ─────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+/* ── Scrollbar ──────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 2px; }
+::-webkit-scrollbar-track { background: var(--obsidian); }
+::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
+
+/* ── Typography Scale ───────────────────────────────────── */
+.t-display {
+  font-family: var(--serif);
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  font-weight: 300;
+  line-height: 0.95;
+  letter-spacing: 0.04em;
+}
+
+.t-heading {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: 0.03em;
+}
+
+.t-subheading {
+  font-family: var(--serif);
+  font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+  font-weight: 300;
+  line-height: 1.2;
+}
+
+.t-label {
+  font-family: var(--sans);
+  font-size: 0.62rem;
+  font-weight: 300;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.t-body {
+  font-size: 0.85rem;
+  font-weight: 300;
+  line-height: 1.85;
+  color: var(--muted-2);
+  letter-spacing: 0.03em;
+}
+
+.t-small {
+  font-size: 0.7rem;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+em { font-style: italic; color: var(--gold-light); }
+
+/* ── Layout Utilities ───────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: var(--max-w);
+  margin-inline: auto;
+  padding-inline: clamp(1.5rem, 5vw, 5rem);
+}
+
+.section {
+  padding-block: var(--sp-xl);
+}
+
+.section--dark { background: var(--obsidian); }
+.section--ink  { background: var(--ink); }
+.section--surface { background: var(--surface); }
+
+/* ── Divider Ornament ───────────────────────────────────── */
+.ornament {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.ornament::before,
+.ornament::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to var(--dir, right), transparent, var(--gold-dim));
+  max-width: 120px;
+}
+
+.ornament::after {
+  --dir: left;
+}
+
+.ornament__gem {
+  width: 5px;
+  height: 5px;
+  background: var(--gold);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+/* ── Scroll Reveal ──────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity var(--t-slow) var(--ease),
+    transform var(--t-slow) var(--ease);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Buttons ────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  font-weight: 300;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  padding: 0.9rem 2.4rem;
+  border: 1px solid transparent;
+  transition:
+    background var(--t-med) var(--ease),
+    color var(--t-med) var(--ease),
+    border-color var(--t-med) var(--ease),
+    transform var(--t-fast) var(--ease);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn:active { transform: scale(0.98); }
+
+.btn--primary {
+  background: var(--gold);
+  color: var(--obsidian);
+  border-color: var(--gold);
+}
+
+.btn--primary:hover {
+  background: transparent;
+  color: var(--gold);
+}
+
+.btn--outline {
+  background: transparent;
+  color: var(--gold);
+  border-color: var(--gold-dim);
+}
+
+.btn--outline:hover {
+  background: var(--gold);
+  color: var(--obsidian);
+  border-color: var(--gold);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--muted-2);
+  border-color: var(--border-light);
+}
+
+.btn--ghost:hover {
+  color: var(--ivory);
+  border-color: var(--muted);
+}
+
+.btn--icon {
+  padding: 0.7rem;
+  border-radius: 0;
+  width: 42px;
+  height: 42px;
+}
+
+/* ── Badge ──────────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 0.58rem;
+  font-weight: 300;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 0.28rem 0.7rem;
+  background: var(--gold);
+  color: var(--obsidian);
+}
+
+/* ── Note Pills ─────────────────────────────────────────── */
+.note-pill {
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--ivory-dim);
+  background: rgba(201, 169, 110, 0.08);
+  border: 1px solid rgba(201, 169, 110, 0.2);
+  padding: 0.25rem 0.75rem;
+  display: inline-block;
+}
+
+/* ── Toast Notification ─────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface-2);
+  border: 1px solid var(--gold-dim);
+  color: var(--gold-light);
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  padding: 0.8rem 2rem;
+  z-index: 9000;
+  opacity: 0;
+  transition: opacity var(--t-med) var(--ease), transform var(--t-med) var(--ease);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ── Page Loader ────────────────────────────────────────── */
+#page-loader {
+  position: fixed;
+  inset: 0;
+  background: var(--obsidian);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1.5rem;
+  transition: opacity 0.8s var(--ease), visibility 0.8s;
+}
+
+#page-loader.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.loader-logo {
+  width: 80px;
+  opacity: 0.8;
+}
+
+.loader-bar {
+  width: 120px;
+  height: 1px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.loader-bar::after {
+  content: '';
+  display: block;
+  height: 100%;
+  background: var(--gold);
+  animation: loaderSlide 1.2s var(--ease) forwards;
+}
+
+@keyframes loaderSlide {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+/* ── Page Transition ────────────────────────────────────── */
+.page-enter {
+  animation: pageEnter 0.6s var(--ease) both;
+}
+
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Animations ─────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* ── Media Utilities ────────────────────────────────────── */
+@media (max-width: 768px) {
+  :root { --nav-h: 64px; }
+  .section { padding-block: var(--sp-lg); }
+  .hide-mobile { display: none !important; }
+}
+
+@media (min-width: 769px) {
+  .hide-desktop { display: none !important; }
+}
