@@ -1,9 +1,16 @@
 /* ═══════════════════════════════════════════════
-   X Note — Cart Page Logic (v2)
+   X Note — Cart Page Logic (v3)
    Two-step flow: Order Summary → Checkout Form
+   Orders → WhatsApp (customer-facing) + Google Sheets (tracking)
 ════════════════════════════════════════════════ */
 window.XNOTE = window.XNOTE || {};
 XNOTE.shipping = XNOTE.shipping || { local: 85, distant: 125 };
+
+/* ── CONFIG — paste your Google Apps Script web app URL here ──
+   See google-apps-script/SETUP.md for full instructions.
+   Leave empty ('') to skip Sheets saving (WhatsApp still works).
+─────────────────────────────────────────────────────────────── */
+var SHEETS_ENDPOINT = '';   /* e.g. 'https://script.google.com/macros/s/AKfy.../exec' */
 
 var _shippingZone  = 'local';
 var _shippingCost  = XNOTE.shipping.local;
@@ -16,9 +23,9 @@ function showStep(step) {
 }
 
 window.renderPageCart = function() {
-  var items   = XNOTE.cart.readCart();
-  var listEl  = document.getElementById('page-cart-list');
-  var countEl = document.getElementById('page-cart-count');
+  var items    = XNOTE.cart.readCart();
+  var listEl   = document.getElementById('page-cart-list');
+  var countEl  = document.getElementById('page-cart-count');
   var totalsEl = document.getElementById('page-totals');
   if (!listEl) return;
 
@@ -104,6 +111,20 @@ function syncReceiptPreview() {
   if (els.rPay)  els.rPay.textContent  = payName;
 }
 
+/* ── Save order to Google Sheets (fire-and-forget) ────────────── */
+function _saveOrderToSheets(orderData) {
+  if (!SHEETS_ENDPOINT) return;
+  /* Use no-cors fetch — response is opaque but data goes through */
+  fetch(SHEETS_ENDPOINT, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(orderData),
+  })
+  .then(function() { console.log('Order saved to Google Sheets.'); })
+  .catch(function(err) { console.warn('Sheets save failed (order still sent via WhatsApp):', err); });
+}
+
 function placeOrder() {
   var name    = (document.getElementById('c-name')    || {}).value || '';
   var phone   = (document.getElementById('c-phone')   || {}).value || '';
@@ -124,59 +145,52 @@ function placeOrder() {
   if (!items.length)   { alert('Your cart is empty.'); return; }
 
   var refNum = 'XN-' + Date.now().toString(36).toUpperCase();
-  var zone   = _shippingZone === 'local' ? 'Normal Shipping' : 'Fast Shipping';
-  var total  = XNOTE.formatPrice(_orderSubtotal + _shippingCost);
+  var zone   = _shippingZone === 'local' ? 'Standard Delivery (3–5 days)' : 'Express Delivery (1–2 days)';
+  var total  = _orderSubtotal + _shippingCost;
 
   var orderLines = items.map(function(item) {
     var p = XNOTE.products.find(function(x) { return x.id === item.id; });
     if (!p) return '';
     var price = XNOTE.getPriceForSize(p, item.size);
     return p.name + ' (' + item.size + ') x' + item.qty + ' = ' + XNOTE.formatPrice(price * item.qty);
-  }).filter(Boolean).join('\n');
+  }).filter(Boolean);
 
-  /* ── WhatsApp message to store owner ── */
+  var orderLinesText = orderLines.join('\n');
+  var orderLinesSheet = orderLines.join(' | ');
+
+  /* ── 1. Save to Google Sheets for tracking ── */
+  _saveOrderToSheets({
+    name:     name,
+    phone:    phone,
+    email:    email,
+    address:  address,
+    shipping: zone,
+    payment:  payName,
+    items:    orderLinesSheet,
+    total:    total,
+    notes:    notes,
+    ref:      refNum,
+  });
+
+  /* ── 2. WhatsApp message to store owner ── */
   var waMsg =
     '\uD83D\uDED8 *New Order \u2014 X Note*\n' +
-    'Ref: ' + refNum + '\n\n' +
+    'Ref: *' + refNum + '*\n\n' +
     '*Name:* ' + name + '\n' +
     '*Phone:* ' + phone + '\n' +
     '*Email:* ' + email + '\n' +
     '*Address:* ' + address + '\n' +
     (notes ? '*Notes:* ' + notes + '\n' : '') +
-    '\n*Items:*\n' + orderLines + '\n\n' +
+    '\n*Items:*\n' + orderLinesText + '\n\n' +
     '*Shipping (' + zone + '):* ' + XNOTE.formatPrice(_shippingCost) + '\n' +
-    '*Total:* ' + total + '\n' +
+    '*Total:* ' + XNOTE.formatPrice(total) + '\n' +
     '*Payment:* ' + payName + '\n\n' +
     'Please confirm or cancel this order.';
 
   var waNumber = (XNOTE.whatsappNumber || '201000000000').replace(/\D/g, '');
   var waUrl    = 'https://wa.me/' + waNumber + '?text=' + encodeURIComponent(waMsg);
 
-  /* ── Email receipt to customer (mailto best-effort) ── */
-  var emailBody =
-    'Dear ' + name + ',\n\n' +
-    'Thank you for your X Note order.\n\n' +
-    'ORDER RECEIPT\n' +
-    'Reference: ' + refNum + '\n' +
-    '----------------------------\n' +
-    orderLines + '\n\n' +
-    'Shipping (' + zone + '): ' + XNOTE.formatPrice(_shippingCost) + '\n' +
-    'TOTAL: ' + total + '\n\n' +
-    'Payment: ' + payName + '\n' +
-    'Delivery: ' + address + '\n\n' +
-    'We will contact you on WhatsApp at ' + phone + ' to arrange payment.\n\n' +
-    'X Note Maison de Parfum';
-
-  try {
-    window.open(
-      'mailto:' + encodeURIComponent(email) +
-      '?subject=' + encodeURIComponent('Your X Note Order — ' + refNum) +
-      '&body=' + encodeURIComponent(emailBody),
-      '_blank'
-    );
-  } catch(e) {}
-
-  /* ── Show success overlay ── */
+  /* ── 3. Show success overlay ── */
   var overlay = document.getElementById('order-success-overlay');
   var refEl   = document.getElementById('success-ref-num');
   var pmEl    = document.getElementById('success-payment-method');

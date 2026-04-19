@@ -210,17 +210,29 @@ em { font-style: italic; color: var(--gold-light); }
 }
 
 /* Scroll Reveal */
-.reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition:
-    opacity var(--t-slow) var(--ease),
-    transform var(--t-slow) var(--ease);
+/* Reveal: hidden by default on DESKTOP only */
+@media (min-width: 901px) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity var(--t-slow) var(--ease),
+      transform var(--t-slow) var(--ease);
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.reveal.is-visible {
-  opacity: 1;
-  transform: translateY(0);
+/* Mobile: always visible, no animation */
+@media (max-width: 900px) {
+  .reveal,
+  .reveal.is-visible {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
 }
 
 /* Buttons */
@@ -504,3 +516,5 @@ em { font-style: italic; color: var(--gold-light); }
 
 /* Smaller button variant */
 .btn--sm { padding: 0.55rem 1rem; font-size: 0.6rem; }
+
+

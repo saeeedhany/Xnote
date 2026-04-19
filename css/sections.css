@@ -843,6 +843,13 @@ textarea.form-control {
   .about-strip__visual { aspect-ratio: 4 / 3; }
   .about-strip__text .section-header { text-align: center; }
   .about-strip__stats { justify-content: center; }
+  /* Ensure sections visible on smaller mobile */
+  #signature, #reviews,
+  .sig-carousel-outer, .testimonials__carousel-outer,
+  .section-header, .section-header__label, .section-header__title, .section-header__sub {
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
 }
 
 /* Hero logo (replaces text title) */
@@ -1039,6 +1046,7 @@ textarea.form-control {
   position: relative;
 }
 
+/* ── OLD hover-btn (kept for any other pages using it) ── */
 .carousel-hover-btn {
   position: absolute;
   top: 50%;
@@ -1072,25 +1080,88 @@ textarea.form-control {
   stroke-width: 1;
 }
 
-.testimonials__carousel-outer {
+/* ── NEW: sig-carousel-outer — wrapper that holds track + edge buttons ── */
+.sig-carousel-outer {
   position: relative;
-  overflow: visible;
+  display: flex;
+  align-items: center;
+  gap: 0;
 }
 
-.testimonials__carousel-outer .carousel-hover-btn--left  { left: -46px; }
-.testimonials__carousel-outer .carousel-hover-btn--right { right: -46px; }
+.sig-carousel-outer .sig-carousel {
+  flex: 1;
+  min-width: 0;
+}
 
-/* Show arrows on outer hover for testimonials */
-.testimonials__carousel-outer:hover .carousel-hover-btn {
-  opacity: 1;
+/* ── Shared edge button style (used in sig + testimonials) ── */
+.carousel-edge-btn {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--gold-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 2px;
+  opacity: 0.35;
+  transition:
+    opacity var(--t-med) var(--ease),
+    color var(--t-med) var(--ease),
+    border-color var(--t-med) var(--ease),
+    background var(--t-fast) var(--ease);
+  z-index: 10;
   pointer-events: auto;
 }
 
-/* Mobile scroll line for testimonials outer */
+.carousel-edge-btn svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 1.2;
+}
+
+.carousel-edge-btn--left  { margin-right: 1rem; }
+.carousel-edge-btn--right { margin-left: 1rem; }
+
+/* Show on container hover */
+.sig-carousel-outer:hover .carousel-edge-btn,
+.testimonials__carousel-outer:hover .carousel-edge-btn {
+  opacity: 0.7;
+}
+
+/* Full brightness when button itself is hovered */
+.carousel-edge-btn:hover {
+  opacity: 1;
+  color: var(--gold);
+  border-color: var(--gold-dim);
+  background: rgba(201,169,110,0.07);
+}
+
+/* ── Testimonials outer wrapper ── */
+.testimonials__carousel-outer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow: visible;
+}
+
+.testimonials__carousel-outer .testimonials__track-wrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.testimonials__carousel-outer .carousel-edge-btn--left  { margin-right: 1rem; }
+.testimonials__carousel-outer .carousel-edge-btn--right { margin-left: 1rem; }
+
+/* Mobile: hide edge buttons, show scroll line */
 @media (max-width: 699px) {
-  .testimonials__carousel-outer .carousel-hover-btn {
+  .carousel-edge-btn {
     display: none !important;
   }
+  .sig-carousel-outer::after,
   .testimonials__carousel-outer::after {
     content: '';
     display: block;
@@ -1098,6 +1169,25 @@ textarea.form-control {
     margin-top: 1.2rem;
     background: linear-gradient(to right, transparent, var(--border-light) 20%, var(--border-light) 80%, transparent);
     width: 100%;
+  }
+  /* Ensure sections remain visible on mobile */
+  #signature, #reviews,
+  .section-header, .section-header__label, .section-header__title, .section-header__sub,
+  .sig-carousel-outer, .testimonials__carousel-outer {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 1 !important;
+  }
+  /* Force min-height for section content on mobile */
+  .sig-carousel-outer, .testimonials__carousel-outer {
+    min-height: 200px !important;
+  }
+  /* Ensure track is visible */
+  .sig-carousel__track, .testimonials__track {
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 1 !important;
   }
 }
 
@@ -1107,7 +1197,7 @@ textarea.form-control {
 .wa-float {
   position: fixed;
   bottom: 2rem;
-  right: 2rem;
+  left: 2rem;
   width: 56px;
   height: 56px;
   border-radius: 50%;
@@ -1135,7 +1225,7 @@ textarea.form-control {
 
 .wa-float__tooltip {
   position: absolute;
-  right: 66px;
+  left: 66px;
   background: rgba(10,10,10,0.92);
   color: var(--ivory);
   font-size: 0.72rem;
@@ -1145,7 +1235,7 @@ textarea.form-control {
   white-space: nowrap;
   pointer-events: none;
   opacity: 0;
-  transform: translateX(6px);
+  transform: translateX(-6px);
   transition: opacity var(--t-med) var(--ease), transform var(--t-med) var(--ease);
 }
 
@@ -1356,44 +1446,6 @@ a.contact-channel:hover {
 .star-input.active,
 .star-input:hover { color: var(--gold); }
 
-/* Show on section hover */
-.sig-carousel--hover-arrows:hover .carousel-hover-btn {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* Keep arrow visible when directly hovered (prevents flicker as cursor moves toward it) */
-.carousel-hover-btn:hover {
-  opacity: 1 !important;
-  pointer-events: auto !important;
-  color: var(--gold);
-}
-
-/* Invisible bridge fills the gap between the carousel edge and the arrow button,
-   so moving the mouse toward the button doesn't leave the hover zone */
-.sig-carousel--hover-arrows .carousel-hover-btn--left::before,
-.sig-carousel--hover-arrows .carousel-hover-btn--right::before,
-.testimonials__carousel-outer .carousel-hover-btn--left::before,
-.testimonials__carousel-outer .carousel-hover-btn--right::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 60px;
-  height: 100%;
-  min-height: 80px;
-}
-.sig-carousel--hover-arrows .carousel-hover-btn--left::before,
-.testimonials__carousel-outer .carousel-hover-btn--left::before {
-  right: -4px;
-  left: unset;
-}
-.sig-carousel--hover-arrows .carousel-hover-btn--right::before,
-.testimonials__carousel-outer .carousel-hover-btn--right::before {
-  left: -4px;
-  right: unset;
-}
-
 /* Mobile: hide arrows, show scroll indicator line */
 @media (max-width: 699px) {
   .carousel-hover-btn {
@@ -1406,5 +1458,110 @@ a.contact-channel:hover {
     margin-top: 1.2rem;
     background: linear-gradient(to right, transparent, var(--border-light) 20%, var(--border-light) 80%, transparent);
     width: 100%;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   COLLECTION SEARCH BAR
+════════════════════════════════════════════════ */
+.collection-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.collection-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  max-width: 560px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.collection-search__icon {
+  position: absolute;
+  left: 0.75rem;
+  width: 13px;
+  height: 13px;
+  color: var(--muted);
+  pointer-events: none;
+  stroke-width: 1.5;
+  flex-shrink: 0;
+}
+
+.collection-search__input {
+  width: 100%;
+  background: var(--surface-2, #141414);
+  border: 1px solid var(--border);
+  color: var(--ivory);
+  font-family: var(--sans, 'Jost', sans-serif);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  padding: 0.3rem 2rem 0.3rem 2rem;
+  outline: none;
+  border-radius: 2px;
+  transition: border-color var(--t-med) var(--ease);
+}
+
+.collection-search__input::placeholder {
+  color: var(--muted);
+}
+
+.collection-search__input:focus {
+  border-color: var(--gold-dim);
+}
+
+.collection-search__clear {
+  position: absolute;
+  right: 0.5rem;
+  width: 20px;
+  height: 20px;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--t-fast);
+  padding: 0;
+}
+
+.collection-search__clear:hover {
+  color: var(--ivory);
+}
+
+.collection-controls .filter-tabs {
+  justify-content: center;
+}
+
+.collection-no-results {
+  text-align: center;
+  padding: 5rem 1rem;
+  color: var(--muted);
+}
+
+.collection-no-results__title {
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  font-weight: 300;
+  color: var(--ivory-dim);
+  margin-bottom: 0.6rem;
+}
+
+.collection-no-results__sub {
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  line-height: 1.8;
+}
+
+@media (max-width: 699px) {
+  .collection-search__input {
+    font-size: 0.72rem;
+    padding: 0.4rem 2rem 0.4rem 2rem;
   }
 }

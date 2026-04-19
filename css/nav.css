@@ -277,3 +277,26 @@
 @media (max-width: 480px) {
   .nav { padding-inline: 1.5rem; }
 }
+
+/* ── Favourites heart badge ── */
+.nav__action-btn .nav__heart-count {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 16px;
+  height: 16px;
+  background: var(--gold);
+  color: var(--obsidian);
+  font-size: 0.55rem;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: transform var(--t-fast) var(--ease-spring);
+}
+
+.nav__action-btn.fav-active svg {
+  fill: var(--gold);
+  stroke: var(--gold);
+}

@@ -12,6 +12,11 @@
         <link rel="stylesheet" href="css/nav.css"/>
         <link rel="stylesheet" href="css/products.css"/>
         <link rel="stylesheet" href="css/sections.css"/>
+        <style>
+          @media (max-width: 900px) {
+            .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+          }
+        </style>
         <link rel="stylesheet" href="css/cart-page.css"/>
     </head>
     <body>
@@ -28,11 +33,14 @@
                 <div class="nav__links">
                     <a href="index.html"      class="nav__link" data-page="index.html">Home</a>
                     <a href="collection.html" class="nav__link" data-page="collection.html">Collection</a>
-                    <a href="cart.html"       class="nav__link" data-page="cart.html">Order</a>
                     <a href="about.html"      class="nav__link" data-page="about.html">About</a>
                     <a href="contact.html"    class="nav__link" data-page="contact.html">Contact</a>
                 </div>
                 <div class="nav__actions">
+                    <a href="favourites.html" class="nav__action-btn" aria-label="Favourites" id="nav-fav-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                        <span class="nav__heart-count" id="nav-fav-count" style="display:none">0</span>
+                    </a>
                     <button class="nav__action-btn" data-open-cart aria-label="Open cart">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                         <span class="nav__count" data-cart-count style="display:none">0</span>
@@ -44,10 +52,12 @@
         <div class="nav__mobile" id="mobile-menu">
             <a href="index.html"      class="nav__mobile-link" data-page="index.html">Home</a>
             <a href="collection.html" class="nav__mobile-link" data-page="collection.html">Collection</a>
-            <a href="cart.html"       class="nav__mobile-link" data-page="cart.html">Order</a>
             <a href="about.html"      class="nav__mobile-link" data-page="about.html">About</a>
             <a href="contact.html"    class="nav__mobile-link" data-page="contact.html">Contact</a>
             <div class="nav__mobile-actions">
+                <a href="favourites.html" class="nav__action-btn" aria-label="Favourites">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </a>
                 <button class="nav__action-btn" data-open-cart>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                     <span class="nav__count" data-cart-count style="display:none">0</span>

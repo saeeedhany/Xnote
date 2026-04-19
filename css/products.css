@@ -552,3 +552,42 @@
   font-size: 0.7rem;
   color: var(--muted);
 }
+
+/* ── Sticky collection controls ── */
+.collection-controls-sticky-wrapper {
+  position: sticky;
+  top: var(--nav-h);
+  z-index: 600;
+  background: var(--ink);
+  padding-block: 0.15rem;
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  margin-bottom: 0 !important;
+}
+
+/* ── Favourites page ── */
+.favourites-empty {
+  text-align: center;
+  padding: 6rem 2rem;
+  color: var(--ivory-dim);
+}
+.favourites-empty svg {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 1.5rem;
+  stroke: var(--gold);
+  opacity: 0.4;
+  display: block;
+}
+.favourites-empty__title {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  color: var(--ivory);
+  margin-bottom: 0.8rem;
+}
+.favourites-empty__sub {
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  opacity: 0.6;
+}

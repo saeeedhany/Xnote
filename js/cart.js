@@ -80,6 +80,7 @@ XNOTE.cart = (function () {
     _syncWishButtons();
     _bump('[data-wish-count]');
     _refreshPageCartIfPresent();
+    if (XNOTE.ui && XNOTE.ui.updateFavCount) XNOTE.ui.updateFavCount();
     return list.includes(productId);
   }
 

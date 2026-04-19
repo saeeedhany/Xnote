@@ -45,6 +45,15 @@ XNOTE.ui = (function () {
 
   /* Scroll Reveal */
   function initReveal() {
+    /* Mobile: CSS already makes everything visible — nothing to do */
+    if (window.innerWidth <= 900) {
+      /* Mark them anyway so any JS that checks is-visible works */
+      document.querySelectorAll('.reveal').forEach(function (el) {
+        el.classList.add('is-visible');
+      });
+      return;
+    }
+
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         if (!e.isIntersecting) return;
@@ -358,6 +367,7 @@ XNOTE.ui = (function () {
     initModal();
     initReviewModal();
     XNOTE.cart.init();
+    XNOTE.ui.updateFavCount();
     requestAnimationFrame(initCarousel);
   }
 
@@ -379,3 +389,18 @@ XNOTE.ui = (function () {
 }());
 
 document.addEventListener('DOMContentLoaded', function () { XNOTE.ui.init(); });
+
+/* ── Favourites badge updater ── */
+XNOTE.ui.updateFavCount = function() {
+  var favs = JSON.parse(localStorage.getItem('xnote_wish_v2') || '[]');
+  var countEl = document.getElementById('nav-fav-count');
+  if (!countEl) return;
+  var n = favs.length;
+  countEl.textContent = n;
+  countEl.style.display = n > 0 ? 'flex' : 'none';
+  var btn = document.getElementById('nav-fav-btn');
+  if (btn) btn.classList.toggle('fav-active', n > 0);
+};
+window.addEventListener('storage', function(e) {
+  if (e.key === 'xnote_wish_v2') XNOTE.ui.updateFavCount();
+});
