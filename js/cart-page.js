@@ -1,4 +1,4 @@
-var SHEETS_ENDPOINT = ''; /* ← WEB APP URL*/
+var SHEETS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzinUfj7ivxN5WgVfEFkJbsWv-X1Olvnle82kjrabFlBH7-u6VqjaEFC7imTOD3du2n/exec'; /* ← WEB APP URL*/
 
 /* Render cart items on the page */
 window.renderPageCart = function () {
