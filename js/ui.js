@@ -128,7 +128,7 @@ XNOTE.ui = (function () {
     var p = XNOTE.products.find(function (x) { return x.id === _modalId; });
     if (!p) return;
     var el = document.querySelector('#product-modal .modal__price');
-    if (el) el.textContent = '$' + XNOTE.getPriceForSize(p, _modalSize) + ' / ' + _modalSize;
+    if (el) el.textContent = XNOTE.formatPrice(XNOTE.getPriceForSize(p, _modalSize)) + ' / ' + _modalSize;
   }
 
   function closeModal() {
@@ -217,7 +217,7 @@ XNOTE.ui = (function () {
   function openReviewModal()  { var bd = document.getElementById('review-modal'); if (bd) { bd.classList.add('open'); document.body.style.overflow = 'hidden'; } }
   function closeReviewModal() { var bd = document.getElementById('review-modal'); if (bd) bd.classList.remove('open'); document.body.style.overflow = ''; }
 
-  /* Testimonials Carousel */
+  /* ── Testimonials Carousel ────────────────────────────── */
   function buildCarousel(testimonials) {
     var track  = document.querySelector('.testimonials__track');
     var dotsEl = document.querySelector('.testimonials__dots');
@@ -306,7 +306,7 @@ XNOTE.ui = (function () {
           '<div class="product-card__placeholder-wrap">' + XNOTE.productImgHtml(product) + '</div>' +
           '<div class="product-card__overlay">' +
             '<div class="product-card__overlay-actions">' +
-              '<button class="btn btn--primary" onclick="event.stopPropagation();XNOTE.ui.openModal(\'' + product.id + '\')">Add to Cart</button>' +
+              '<button class="btn btn--primary" onclick="event.stopPropagation();XNOTE.cart.addToCart(\'' + product.id + '\', null, 1)">Add to Cart</button>' +
               '<button class="btn btn--outline"  onclick="event.stopPropagation();XNOTE.ui.openModal(\'' + product.id + '\')">Details</button>' +
             '</div>' +
           '</div>' +
@@ -317,10 +317,10 @@ XNOTE.ui = (function () {
           '<p class="product-card__desc">' + product.description + '</p>' +
           '<div class="product-card__footer">' +
             '<div>' +
-              '<span class="product-card__price">From $' + defaultPrice + '</span>' +
+              '<span class="product-card__price">From ' + XNOTE.formatPrice(defaultPrice) + '</span>' +
               '<span class="product-card__price-unit">' + product.sizes.map(function (s) { return s.label; }).join(' / ') + '</span>' +
             '</div>' +
-            '<button class="btn btn--outline btn--sm" onclick="event.stopPropagation();XNOTE.ui.openModal(\'' + product.id + '\')">Order</button>' +
+            '<button class="btn btn--outline btn--sm" onclick="event.stopPropagation();XNOTE.cart.addToCart(\'' + product.id + '\', null, 1)">Order</button>' +
           '</div>' +
         '</div>' +
       '</article>'

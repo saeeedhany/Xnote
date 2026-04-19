@@ -100,7 +100,7 @@ XNOTE.cart = (function () {
       var p = XNOTE.products.find(x => x.id === item.id);
       if (!p) return '';
       var price = XNOTE.getPriceForSize(p, item.size);
-      return p.name + ' (' + item.size + ') x' + item.qty + ' = $' + (price * item.qty);
+      return p.name + ' (' + item.size + ') x' + item.qty + ' = ' + XNOTE.formatPrice(price * item.qty);
     }).filter(Boolean).join('\n');
   }
 
@@ -111,17 +111,24 @@ XNOTE.cart = (function () {
     msg += '*Customer Details:*\n';
     msg += '\u2022 Name: '    + details.name    + '\n';
     msg += '\u2022 Phone: '   + details.phone   + '\n';
+    if (details.email)   msg += '\u2022 Email: '   + details.email   + '\n';
     msg += '\u2022 Address: ' + details.address + '\n\n';
     msg += '*Order Items:*\n';
     items.forEach(function (item) {
       var p = XNOTE.products.find(x => x.id === item.id);
       if (!p) return;
       var price = XNOTE.getPriceForSize(p, item.size);
-      msg += '\u2022 ' + p.name + ' (' + item.size + ') x' + item.qty + ' = $' + (price * item.qty) + '\n';
+      msg += '\u2022 ' + p.name + ' (' + item.size + ') x' + item.qty + ' = ' + XNOTE.formatPrice(price * item.qty) + '\n';
     });
-    msg += '\n*Total: $' + getTotal() + '*\n';
+    msg += '\n*Total: ' + XNOTE.formatPrice(getTotal()) + '*\n';
     if (details.shipping) msg += '*Shipping: ' + details.shipping + '*\n';
+    if (details.payment) {
+      msg += '*Payment Method: ' + details.payment + '*\n';
+      if (details.payment === 'InstaPay')       msg += '_Please send payment to InstaPay: 01000000000_\n';
+      if (details.payment === 'Vodafone Cash')  msg += '_Please send payment to Vodafone Cash: 01000000000_\n';
+    }
     if (details.notes)    msg += '\nNotes: ' + details.notes + '\n';
+    msg += '\n_We will confirm your order and send updates to your phone' + (details.email ? ' and email' : '') + '._';
 
     var number = (XNOTE.whatsappNumber || '').replace(/[^0-9]/g, '');
     window.open('https://wa.me/' + number + '?text=' + encodeURIComponent(msg), '_blank');
@@ -140,7 +147,7 @@ XNOTE.cart = (function () {
     if (panelCount) panelCount.textContent = count + ' item' + (count !== 1 ? 's' : '');
 
     var totalEl = document.querySelector('.cart-panel__total-price');
-    if (totalEl) totalEl.textContent = '$' + getTotal();
+    if (totalEl) totalEl.textContent = XNOTE.formatPrice(getTotal());
   }
 
   function _syncWishButtons() {
@@ -195,7 +202,7 @@ XNOTE.cart = (function () {
             '</div>' +
           '</div>' +
           '<div class="cart-item__actions">' +
-            '<span class="cart-item__price">$' + (price * item.qty) + '</span>' +
+            '<span class="cart-item__price">' + XNOTE.formatPrice(price * item.qty) + '</span>' +
             '<button class="cart-item__remove" onclick="XNOTE.cart.removeFromCart(\'' + item.key + '\')">Remove</button>' +
           '</div>' +
         '</div>'

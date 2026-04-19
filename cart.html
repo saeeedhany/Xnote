@@ -3,8 +3,8 @@
     <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <meta name="description" content="X Note - Cart and Order."/>
-        <title>Cart & Order — X Note</title>
+        <meta name="description" content="X Note — Cart and Order."/>
+        <title>Cart & Order - X Note</title>
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
         <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet"/>
@@ -123,6 +123,10 @@
                             <input type="tel" id="c-phone" class="form-control" placeholder="+20 100 000 0000" required/>
                         </div>
                         <div class="form-group">
+                            <label class="form-label" for="c-email">Email Address</label>
+                            <input type="email" id="c-email" class="form-control" placeholder="your@email.com"/>
+                        </div>
+                        <div class="form-group">
                             <label class="form-label" for="c-address">Delivery Address *</label>
                             <textarea id="c-address" class="form-control" placeholder="Street, city, country" required rows="2"></textarea>
                         </div>
@@ -141,25 +145,46 @@
                             <label class="payment-option">
                                 <input type="radio" name="shipping" value="Express Delivery (1-2 days)"/>
                                 <span class="payment-option__label">Express Delivery (1–2 days)</span>
-                                <span class="payment-option__icon">+$15</span>
+                                <span class="payment-option__icon">+150 EGP</span>
                             </label>
                         </div>
 
                         <span class="form-sec-lbl">Payment Method</span>
-                        <div class="wa-note">
-                            Payment is completed via WhatsApp after we confirm your order. Enquire via WhatsApp for any payment questions.
-                        </div>
                         <div class="payment-options">
                             <label class="payment-option">
-                                <input type="radio" name="payment" value="instapay"/>
+                                <input type="radio" name="payment" value="InstaPay" id="pay-instapay" onchange="showPaymentInfo(this.value)"/>
                                 <span class="payment-option__label">InstaPay</span>
                                 <span class="payment-option__icon">&#x1F4B3;</span>
                             </label>
                             <label class="payment-option">
-                                <input type="radio" name="payment" value="vodafone-cash"/>
+                                <input type="radio" name="payment" value="Vodafone Cash" id="pay-vodafone" onchange="showPaymentInfo(this.value)"/>
                                 <span class="payment-option__label">Vodafone Cash</span>
                                 <span class="payment-option__icon">&#x1F4F1;</span>
                             </label>
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="Via WhatsApp" id="pay-wa" onchange="showPaymentInfo(this.value)" checked/>
+                                <span class="payment-option__label">Pay via WhatsApp</span>
+                                <span class="payment-option__icon">&#x1F4AC;</span>
+                            </label>
+                        </div>
+                        <!-- Payment instructions shown after selection -->
+                        <div id="payment-info-box" style="display:none;" class="payment-info-box">
+                            <div id="payment-info-instapay" class="payment-info-card" style="display:none;">
+                                <p class="payment-info-title">&#x1F4B3; InstaPay Instructions</p>
+                                <p class="payment-info-detail">Send the total amount to:</p>
+                                <p class="payment-info-account">InstaPay: <strong>01000000000</strong></p>
+                                <p class="payment-info-note">Please send a screenshot of the transfer via WhatsApp after placing your order.</p>
+                            </div>
+                            <div id="payment-info-vodafone" class="payment-info-card" style="display:none;">
+                                <p class="payment-info-title">&#x1F4F1; Vodafone Cash Instructions</p>
+                                <p class="payment-info-detail">Send the total amount to:</p>
+                                <p class="payment-info-account">Vodafone Cash: <strong>01000000000</strong></p>
+                                <p class="payment-info-note">Please send a screenshot of the transfer via WhatsApp after placing your order.</p>
+                            </div>
+                            <div id="payment-info-wa" class="payment-info-card" style="display:none;">
+                                <p class="payment-info-title">&#x1F4AC; Pay via WhatsApp</p>
+                                <p class="payment-info-note">We will arrange payment details with you directly over WhatsApp after confirming your order.</p>
+                            </div>
                         </div>
 
                         <button class="btn btn--whatsapp" id="wa-btn">
@@ -309,7 +334,7 @@
                 </div>
             </div>
             <div class="footer__bottom">
-                <p class="footer__copy">&copy; 2024 X Note Maison de Parfum. All rights reserved.</p>
+                <p class="footer__copy">&copy; <span id="footer-year"></span> X Note Maison de Parfum. All rights reserved.</p>
                 <p class="footer__built">Built with care by <a href="https://github.com/saeeedhany" target="_blank" rel="noopener">Saeed</a></p>
             </div>
         </footer>
@@ -317,5 +342,25 @@
         <script src="js/cart.js"></script>
         <script src="js/ui.js"></script>
         <script src="js/cart-page.js"></script>
+        <script>
+/* Dynamic copyright year */
+document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+/* Payment method info toggle */
+function showPaymentInfo(method) {
+var box = document.getElementById('payment-info-box');
+var cards = document.querySelectorAll('.payment-info-card');
+cards.forEach(function(c) { c.style.display = 'none'; });
+box.style.display = 'block';
+if (method === 'InstaPay')      document.getElementById('payment-info-instapay').style.display = 'block';
+if (method === 'Vodafone Cash') document.getElementById('payment-info-vodafone').style.display = 'block';
+if (method === 'Via WhatsApp')  document.getElementById('payment-info-wa').style.display = 'block';
+}
+/* Show default payment info on load */
+document.addEventListener('DOMContentLoaded', function() {
+showPaymentInfo('Via WhatsApp');
+document.getElementById('pay-wa').checked = true;
+});
+        </script>
     </body>
 </html>

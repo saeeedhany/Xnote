@@ -1,6 +1,5 @@
-var SHEETS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzinUfj7ivxN5WgVfEFkJbsWv-X1Olvnle82kjrabFlBH7-u6VqjaEFC7imTOD3du2n/exec'; /* ← WEB APP URL*/
+var SHEETS_ENDPOINT = ''; /* ← WEB APP URL */
 
-/* Render cart items on the page */
 window.renderPageCart = function () {
   var items    = XNOTE.cart.readCart();
   var listEl   = document.getElementById('page-cart-list');
@@ -41,7 +40,7 @@ window.renderPageCart = function () {
         '<div class="cp-item__img">' + XNOTE.productImgHtml(p) + '</div>' +
         '<div>' +
           '<div class="cp-item__name">' + p.name + '</div>' +
-          '<div class="cp-item__meta">' + item.size + ' · $' + price + ' each</div>' +
+          '<div class="cp-item__meta">' + item.size + ' · ' + XNOTE.formatPrice(price) + ' each</div>' +
           '<div class="cp-item__qty">' +
             '<button class="cp-qty-btn" onclick="XNOTE.cart.changeQty(\'' + item.key + '\',-1)">&#8722;</button>' +
             '<span class="cp-qty-num">' + item.qty + '</span>' +
@@ -49,15 +48,15 @@ window.renderPageCart = function () {
           '</div>' +
         '</div>' +
         '<div class="cp-item__right">' +
-          '<span class="cp-item__price">$' + line + '</span>' +
+          '<span class="cp-item__price">' + XNOTE.formatPrice(line) + '</span>' +
           '<button class="cp-item__remove" onclick="XNOTE.cart.removeFromCart(\'' + item.key + '\')">Remove</button>' +
         '</div>' +
       '</div>'
     );
   }).join('');
 
-  if (subEl)    subEl.textContent   = '$' + total;
-  if (totalEl)  totalEl.textContent = '$' + total;
+  if (subEl)    subEl.textContent   = XNOTE.formatPrice(total);
+  if (totalEl)  totalEl.textContent = XNOTE.formatPrice(total);
   if (totalsEl) totalsEl.style.display = 'block';
 };
 
@@ -97,7 +96,6 @@ window.renderRecommended = function () {
   });
 };
 
-/* Save order to Google Sheets (silent, async) */
 function saveOrderToSheets(orderData) {
   if (!SHEETS_ENDPOINT) return;
 
@@ -105,26 +103,29 @@ function saveOrderToSheets(orderData) {
     var p = XNOTE.products.find(function (x) { return x.id === item.id; });
     if (!p) return '';
     var price = XNOTE.getPriceForSize(p, item.size);
-    return p.name + ' (' + item.size + ') x' + item.qty + ' = $' + (price * item.qty);
+    return p.name + ' (' + item.size + ') x' + item.qty + ' = ' + XNOTE.formatPrice(price * item.qty);
   }).filter(Boolean).join(' | ');
 
-  var payload = {
-    name:     orderData.name,
-    phone:    orderData.phone,
-    address:  orderData.address,
+  /* Build URL with query parameters — reliable with Apps Script */
+  var params = new URLSearchParams({
+    name:     orderData.name     || '',
+    phone:    orderData.phone    || '',
+    email:    orderData.email    || '',
+    address:  orderData.address  || '',
     shipping: orderData.shipping || 'Standard Delivery',
     payment:  orderData.payment  || 'Via WhatsApp',
     items:    items,
-    total:    XNOTE.cart.getTotal(),
-    notes:    orderData.notes || '',
-  };
+    total:    String(XNOTE.cart.getTotal()),
+    notes:    orderData.notes    || '',
+  });
 
-  fetch(SHEETS_ENDPOINT, {
-    method:  'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body:    JSON.stringify(payload),
-    mode:    'no-cors',
-  }).catch(function () { /* silent */ });
+  /* Use an Image beacon — works cross-origin with no CORS issues */
+  var img = new Image();
+  img.src = SHEETS_ENDPOINT + '?' + params.toString();
+  /* Also try fetch as backup */
+  try {
+    fetch(SHEETS_ENDPOINT + '?' + params.toString(), { mode: 'no-cors' }).catch(function(){});
+  } catch(e) {}
 }
 
 /* WhatsApp order button */
@@ -135,6 +136,7 @@ function initWhatsAppBtn() {
   btn.addEventListener('click', function () {
     var name    = (document.getElementById('c-name').value    || '').trim();
     var phone   = (document.getElementById('c-phone').value   || '').trim();
+    var email   = (document.getElementById('c-email').value   || '').trim();
     var address = (document.getElementById('c-address').value || '').trim();
     var notes   = (document.getElementById('c-notes').value   || '').trim();
 
@@ -156,7 +158,7 @@ function initWhatsAppBtn() {
       return;
     }
 
-    var orderData = { name: name, phone: phone, address: address, notes: notes, shipping: shipping, payment: payment };
+    var orderData = { name: name, phone: phone, email: email, address: address, notes: notes, shipping: shipping, payment: payment };
 
     /* 1. Save to Google Sheets silently in background */
     saveOrderToSheets(orderData);

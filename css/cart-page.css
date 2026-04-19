@@ -314,3 +314,51 @@
 		height: 64px;
 	}
 }
+
+/* ── Payment info box ─────────────────────────────────────── */
+.payment-info-box {
+	margin-top: 0.8rem;
+	margin-bottom: 1.2rem;
+}
+
+.payment-info-card {
+	background: rgba(201, 169, 110, 0.07);
+	border: 1px solid rgba(201, 169, 110, 0.25);
+	border-radius: 2px;
+	padding: 1rem 1.2rem;
+}
+
+.payment-info-title {
+	font-family: var(--serif);
+	font-size: 0.85rem;
+	color: var(--gold);
+	font-weight: 600;
+	margin-bottom: 0.5rem;
+}
+
+.payment-info-detail {
+	font-size: 0.72rem;
+	color: var(--ivory-dim);
+	margin-bottom: 0.3rem;
+}
+
+.payment-info-account {
+	font-size: 0.85rem;
+	color: var(--ivory);
+	margin-bottom: 0.5rem;
+	letter-spacing: 0.05em;
+}
+
+.payment-info-account strong {
+	color: var(--gold-light);
+	font-weight: 600;
+	letter-spacing: 0.1em;
+}
+
+.payment-info-note {
+	font-size: 0.68rem;
+	color: var(--ivory-dim);
+	opacity: 0.7;
+	line-height: 1.6;
+	font-style: italic;
+}
