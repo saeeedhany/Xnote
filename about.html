@@ -211,10 +211,9 @@
         <script src="js/ui.js"></script>
         <script>
 document.addEventListener("DOMContentLoaded", function() {
-  XNOTE.ui.init();
   var w=document.getElementById("wa-float-btn"); if(w&&XNOTE.whatsappNumber) w.href="https://wa.me/"+XNOTE.whatsappNumber.replace(/\D/g,"");
   var fp = document.getElementById('footer-products');
-  if (fp && XNOTE.products) { fp.innerHTML = XNOTE.products.slice(0,6).map(function(p){ return '<a href="collection.html" class="footer__link">'+p.name+'</a>'; }).join(''); }
+  if (fp && XNOTE.products) { fp.innerHTML = XNOTE.products.map(function(p){ return '<a href="collection.html" class="footer__link">'+p.name+'</a>'; }).join(''); }
   /* Copy logo src from nav to about visual */
   var navLogo = document.querySelector('.nav__logo-img');
   var aboutLogo = document.getElementById('about-logo-img');

@@ -319,11 +319,9 @@
         <script src="js/ui.js"></script>
         <script>
 document.addEventListener('DOMContentLoaded', function() {
-  XNOTE.ui.init();
-
   /* Populate footer fragrances */
   var fp = document.getElementById('footer-products');
-  if (fp && XNOTE.products) { fp.innerHTML = XNOTE.products.slice(0,6).map(function(p){ return '<a href="collection.html" class="footer__link">'+p.name+'</a>'; }).join(''); }
+  if (fp && XNOTE.products) { fp.innerHTML = XNOTE.products.map(function(p){ return '<a href="collection.html" class="footer__link">'+p.name+'</a>'; }).join(''); }
 
   /* WA links */
   var waNum = (XNOTE.whatsappNumber || '201000000000').replace(/\D/g,'');

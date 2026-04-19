@@ -882,10 +882,12 @@ textarea.form-control {
 /* Cart page title */
 .cart-page__title {
   font-family: var(--serif);
-  font-size: clamp(2rem, 5vw, 4rem);
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
   font-weight: 300;
   line-height: 1;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
+  color: var(--ivory);
+  margin-bottom: 0;
 }
 
 /* Footer logo img */
@@ -1360,8 +1362,36 @@ a.contact-channel:hover {
   pointer-events: auto;
 }
 
+/* Keep arrow visible when directly hovered (prevents flicker as cursor moves toward it) */
 .carousel-hover-btn:hover {
+  opacity: 1 !important;
+  pointer-events: auto !important;
   color: var(--gold);
+}
+
+/* Invisible bridge fills the gap between the carousel edge and the arrow button,
+   so moving the mouse toward the button doesn't leave the hover zone */
+.sig-carousel--hover-arrows .carousel-hover-btn--left::before,
+.sig-carousel--hover-arrows .carousel-hover-btn--right::before,
+.testimonials__carousel-outer .carousel-hover-btn--left::before,
+.testimonials__carousel-outer .carousel-hover-btn--right::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 60px;
+  height: 100%;
+  min-height: 80px;
+}
+.sig-carousel--hover-arrows .carousel-hover-btn--left::before,
+.testimonials__carousel-outer .carousel-hover-btn--left::before {
+  right: -4px;
+  left: unset;
+}
+.sig-carousel--hover-arrows .carousel-hover-btn--right::before,
+.testimonials__carousel-outer .carousel-hover-btn--right::before {
+  left: -4px;
+  right: unset;
 }
 
 /* Mobile: hide arrows, show scroll indicator line */
