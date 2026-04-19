@@ -281,6 +281,10 @@ XNOTE.ui = (function () {
       buildCarousel(XNOTE.getAllTestimonials());
       initCarousel();
     };
+
+    /* Expose for hover buttons */
+    XNOTE.ui.carouselNext = function () { next(); startAuto(); };
+    XNOTE.ui.carouselPrev = function () { prev(); startAuto(); };
   }
 
   /* Card builders */
@@ -368,6 +372,8 @@ XNOTE.ui = (function () {
     buildTestimonialCard,
     buildCarousel,
     initCarousel,
+    carouselNext: function () {},
+    carouselPrev: function () {},
     initReveal,
   };
 }());

@@ -2,6 +2,12 @@ window.XNOTE = window.XNOTE || {};
 
 XNOTE.whatsappNumber = '201000000000';
 
+/* ── Shipping costs (EGP) ──
+   local   = Cairo & nearby areas
+   distant = Other governorates
+   Change these values anytime. */
+XNOTE.shipping = { local: 50, distant: 90 };
+
 XNOTE.currency = 'EGP';
 
 XNOTE.products = [

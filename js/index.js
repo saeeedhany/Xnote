@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var track    = document.getElementById('signature-track');
   var prevBtn  = document.getElementById('sig-prev');
   var nextBtn  = document.getElementById('sig-next');
-  var dotsWrap = document.getElementById('sig-dots');
+  /* hover arrows mode, no dots */
 
   if (track) {
     var featured = XNOTE.products.filter(function (p) { return p.isUnique; });
@@ -23,12 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
       card.addEventListener('click', function () { XNOTE.ui.openModal(card.dataset.id); });
     });
 
-    /* Build dots */
-    if (dotsWrap) {
-      dotsWrap.innerHTML = featured.map(function (_, i) {
-        return '<button class="sig-dot' + (i === 0 ? ' active' : '') + '" aria-label="Go to slide ' + (i + 1) + '"></button>';
-      }).join('');
-    }
+    /* no dots in hover-arrow mode */
 
     function getVisible() {
       if (window.innerWidth >= 1100) return 3;
@@ -50,12 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var w = getCardWidth();
       track.style.transform = 'translateX(-' + (cur * w) + 'px)';
 
-      /* Update dots */
-      if (dotsWrap) {
-        dotsWrap.querySelectorAll('.sig-dot').forEach(function (d, i) {
-          d.classList.toggle('active', i === cur);
-        });
-      }
+      /* no dots */
     }
 
     function next() { goTo(cur + 1 > Math.max(0, total - getVisible()) ? 0 : cur + 1); }
@@ -69,11 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (nextBtn) nextBtn.addEventListener('click', function () { next(); startAuto(); });
     if (prevBtn) prevBtn.addEventListener('click', function () { prev(); startAuto(); });
 
-    if (dotsWrap) {
-      dotsWrap.querySelectorAll('.sig-dot').forEach(function (d, i) {
-        d.addEventListener('click', function () { goTo(i); startAuto(); });
-      });
-    }
+    /* no dot clicks */
 
     /* Touch / drag swipe */
     var startX = 0;
@@ -92,6 +78,11 @@ document.addEventListener('DOMContentLoaded', function () {
   /* Testimonials carousel */
   XNOTE.ui.buildCarousel(XNOTE.getAllTestimonials());
   XNOTE.ui.initCarousel();
+  /* Wire hover arrow buttons for testimonials */
+  var tPrev = document.querySelector('.testimonials__hover-btn--prev');
+  var tNext = document.querySelector('.testimonials__hover-btn--next');
+  if (tPrev) tPrev.addEventListener('click', function () { XNOTE.ui.carouselPrev(); });
+  if (tNext) tNext.addEventListener('click', function () { XNOTE.ui.carouselNext(); });
 
   /* Footer product links */
   var fp = document.getElementById('footer-products');
