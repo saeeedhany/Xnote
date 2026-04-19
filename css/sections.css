@@ -919,6 +919,7 @@ textarea.form-control {
 .sig-carousel {
   position: relative;
   width: 100%;
+  overflow: visible;
 }
 
 .sig-carousel__wrap {
@@ -1028,6 +1029,9 @@ textarea.form-control {
 /* ═══════════════════════════════════════════════
    HOVER ARROW CAROUSELS
 ════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════
+   CAROUSEL HOVER ARROWS — redesigned
+════════════════════════════════════════════════ */
 .sig-carousel--hover-arrows,
 .testimonials__track-wrap--hover {
   position: relative;
@@ -1037,13 +1041,11 @@ textarea.form-control {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 1px solid var(--gold-dim);
-  background: rgba(8,8,8,0.85);
-  backdrop-filter: blur(8px);
-  color: var(--gold);
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: none;
+  color: var(--gold-dim);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1052,43 +1054,48 @@ textarea.form-control {
   pointer-events: none;
   transition:
     opacity var(--t-med) var(--ease),
-    border-color var(--t-med) var(--ease),
-    background var(--t-med) var(--ease),
-    transform var(--t-med) var(--ease);
+    color var(--t-med) var(--ease);
   z-index: 10;
 }
 
-.carousel-hover-btn--left  { left: -24px; }
-.carousel-hover-btn--right { right: -24px; }
+/* Position arrows OUTSIDE the scroll container */
+.sig-carousel--hover-arrows .carousel-hover-btn--left  { left: -46px; }
+.sig-carousel--hover-arrows .carousel-hover-btn--right { right: -46px; }
+.testimonials__track-wrap--hover .carousel-hover-btn--left  { left: -46px; }
+.testimonials__track-wrap--hover .carousel-hover-btn--right { right: -46px; }
 
 .carousel-hover-btn svg {
-  width: 18px;
-  height: 18px;
-  stroke-width: 1.5;
+  width: 22px;
+  height: 22px;
+  stroke-width: 1;
 }
 
-/* Show on section hover */
-.sig-carousel--hover-arrows:hover .carousel-hover-btn,
-.testimonials__track-wrap--hover:hover .carousel-hover-btn {
+.testimonials__carousel-outer {
+  position: relative;
+  overflow: visible;
+}
+
+.testimonials__carousel-outer .carousel-hover-btn--left  { left: -46px; }
+.testimonials__carousel-outer .carousel-hover-btn--right { right: -46px; }
+
+/* Show arrows on outer hover for testimonials */
+.testimonials__carousel-outer:hover .carousel-hover-btn {
   opacity: 1;
   pointer-events: auto;
 }
 
-.carousel-hover-btn:hover {
-  background: var(--gold-glow);
-  border-color: var(--gold);
-  transform: translateY(-50%) scale(1.1);
-}
-
+/* Mobile scroll line for testimonials outer */
 @media (max-width: 699px) {
-  .carousel-hover-btn--left  { left: 4px; }
-  .carousel-hover-btn--right { right: 4px; }
-  /* Always show on mobile (no hover) */
-  .carousel-hover-btn {
-    opacity: 1;
-    pointer-events: auto;
-    width: 36px;
-    height: 36px;
+  .testimonials__carousel-outer .carousel-hover-btn {
+    display: none !important;
+  }
+  .testimonials__carousel-outer::after {
+    content: '';
+    display: block;
+    height: 1px;
+    margin-top: 1.2rem;
+    background: linear-gradient(to right, transparent, var(--border-light) 20%, var(--border-light) 80%, transparent);
+    width: 100%;
   }
 }
 
@@ -1346,3 +1353,28 @@ a.contact-channel:hover {
 }
 .star-input.active,
 .star-input:hover { color: var(--gold); }
+
+/* Show on section hover */
+.sig-carousel--hover-arrows:hover .carousel-hover-btn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.carousel-hover-btn:hover {
+  color: var(--gold);
+}
+
+/* Mobile: hide arrows, show scroll indicator line */
+@media (max-width: 699px) {
+  .carousel-hover-btn {
+    display: none !important;
+  }
+  .sig-carousel--hover-arrows::after {
+    content: '';
+    display: block;
+    height: 1px;
+    margin-top: 1.2rem;
+    background: linear-gradient(to right, transparent, var(--border-light) 20%, var(--border-light) 80%, transparent);
+    width: 100%;
+  }
+}

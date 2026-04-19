@@ -93,6 +93,7 @@
                 <div class="about-strip">
                     <div class="about-strip__visual reveal">
                         <div class="about-strip__visual-inner">
+                            <img class="about-strip__logo-img" src="" alt="X Note" id="about-logo-img" style="width:55%;max-width:220px;opacity:0.18;filter:brightness(1.4);display:block;margin:auto;"/>
                             <div class="about-strip__visual-line"></div>
                         </div>
                     </div>
@@ -209,7 +210,16 @@
         <script src="js/cart.js"></script>
         <script src="js/ui.js"></script>
         <script>
-document.addEventListener("DOMContentLoaded", function() { XNOTE.ui.init(); var w=document.getElementById("wa-float-btn"); if(w&&XNOTE.whatsappNumber) w.href="https://wa.me/"+XNOTE.whatsappNumber.replace(/\D/g,""); });
+document.addEventListener("DOMContentLoaded", function() {
+  XNOTE.ui.init();
+  var w=document.getElementById("wa-float-btn"); if(w&&XNOTE.whatsappNumber) w.href="https://wa.me/"+XNOTE.whatsappNumber.replace(/\D/g,"");
+  var fp = document.getElementById('footer-products');
+  if (fp && XNOTE.products) { fp.innerHTML = XNOTE.products.slice(0,6).map(function(p){ return '<a href="collection.html" class="footer__link">'+p.name+'</a>'; }).join(''); }
+  /* Copy logo src from nav to about visual */
+  var navLogo = document.querySelector('.nav__logo-img');
+  var aboutLogo = document.getElementById('about-logo-img');
+  if (navLogo && aboutLogo) aboutLogo.src = navLogo.src;
+});
 document.getElementById("footer-year").textContent=new Date().getFullYear();
         </script>
 

@@ -6,7 +6,7 @@ XNOTE.whatsappNumber = '201000000000';
    local   = Cairo & nearby areas
    distant = Other governorates
    Change these values anytime. */
-XNOTE.shipping = { local: 50, distant: 90 };
+XNOTE.shipping = { local: 85, distant: 125 };
 
 XNOTE.currency = 'EGP';
 

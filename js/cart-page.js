@@ -3,7 +3,7 @@
    Two-step flow: Order Summary → Checkout Form
 ════════════════════════════════════════════════ */
 window.XNOTE = window.XNOTE || {};
-XNOTE.shipping = XNOTE.shipping || { local: 50, distant: 90 };
+XNOTE.shipping = XNOTE.shipping || { local: 85, distant: 125 };
 
 var _shippingZone  = 'local';
 var _shippingCost  = XNOTE.shipping.local;
@@ -124,7 +124,7 @@ function placeOrder() {
   if (!items.length)   { alert('Your cart is empty.'); return; }
 
   var refNum = 'XN-' + Date.now().toString(36).toUpperCase();
-  var zone   = _shippingZone === 'local' ? 'Local' : 'Distant';
+  var zone   = _shippingZone === 'local' ? 'Normal Shipping' : 'Fast Shipping';
   var total  = XNOTE.formatPrice(_orderSubtotal + _shippingCost);
 
   var orderLines = items.map(function(item) {
