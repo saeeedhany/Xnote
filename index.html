@@ -35,6 +35,7 @@
                     <a href="collection.html" class="nav__link" data-page="collection.html">Collection</a>
                     <a href="about.html"      class="nav__link" data-page="about.html">About</a>
                     <a href="contact.html"    class="nav__link" data-page="contact.html">Contact</a>
+                    <a href="offers.html"      class="nav__link nav__link--offers" data-page="offers.html">Offers</a>
                 </div>
                 <div class="nav__actions">
                     <a href="favourites.html" class="nav__action-btn" aria-label="Favourites" id="nav-fav-btn">
@@ -54,6 +55,7 @@
             <a href="collection.html" class="nav__mobile-link" data-page="collection.html">Collection</a>
             <a href="about.html"      class="nav__mobile-link" data-page="about.html">About</a>
             <a href="contact.html"    class="nav__mobile-link" data-page="contact.html">Contact</a>
+            <a href="offers.html"      class="nav__mobile-link" data-page="offers.html">Offers</a>
             <div class="nav__mobile-actions">
                 <a href="favourites.html" class="nav__action-btn" aria-label="Favourites">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
@@ -175,6 +177,58 @@
             </div>
         </section>
 
+        <!-- ── Limited Offer Banner ── -->
+        <section class="section section--ink offer-banner" id="offer-banner">
+            <div class="container">
+                <div class="offer-banner__inner reveal">
+                    <div class="offer-banner__label">
+                        <span class="offer-banner__badge">Limited Offer</span>
+                    </div>
+                    <h2 class="offer-banner__title">The <em>Trilogy</em> Bundle</h2>
+                    <p class="offer-banner__sub">Three icons. One unforgettable collection.</p>
+                    <div class="offer-banner__items">
+                        <div class="offer-banner__item">
+                            <div class="offer-banner__item-img-wrap">
+                                <img src="./assets/images/Le Male Elixir.webp" alt="Le Male Elixir" class="offer-banner__item-img" id="offer-img-le-male"/>
+                            </div>
+                            <span class="offer-banner__item-name">Le Male Elixir</span>
+                            <span class="offer-banner__item-size">50 ml</span>
+                        </div>
+                        <div class="offer-banner__plus">+</div>
+                        <div class="offer-banner__item">
+                            <div class="offer-banner__item-img-wrap">
+                                <img src="./assets/images/Creed Mountain Water.webp" alt="Creed Mountain Water" class="offer-banner__item-img" id="offer-img-creed"/>
+                            </div>
+                            <span class="offer-banner__item-name">Creed Mountain Water</span>
+                            <span class="offer-banner__item-size">50 ml</span>
+                        </div>
+                        <div class="offer-banner__plus">+</div>
+                        <div class="offer-banner__item">
+                            <div class="offer-banner__item-img-wrap">
+                                <img src="./assets/images/story.webp" alt="Imperial Valley Qisah" class="offer-banner__item-img" id="offer-img-qisah"/>
+                            </div>
+                            <span class="offer-banner__item-name">Imperial Valley Qisah</span>
+                            <span class="offer-banner__item-size">50 ml</span>
+                        </div>
+                    </div>
+                    <div class="offer-banner__price-row">
+                        <span class="offer-banner__price">900 <span class="offer-banner__currency">EGP</span></span>
+                        <span class="offer-banner__price-note">for all three · Save over 50 EGP</span>
+                    </div>
+                    <div class="offer-banner__actions">
+                        <button class="btn btn--primary offer-banner__btn-cart" id="offer-add-to-cart" onclick="XNOTE_addOfferToCart()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                            Add Bundle to Cart
+                        </button>
+                        <a href="offers.html" class="btn btn--outline offer-banner__btn-more">
+                            View All Offers
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="14" height="14"><polyline points="9 18 15 12 9 6"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <div class="modal-backdrop" id="product-modal" role="dialog" aria-modal="true">
             <div class="modal">
                 <button class="modal__close" aria-label="Close">&#215;</button>
@@ -285,6 +339,35 @@
         <script src="js/ui.js"></script>
         <script src="js/index.js"></script>
         <script>document.getElementById("footer-year").textContent=new Date().getFullYear();</script>
+        <script>
+        function XNOTE_addOfferToCart() {
+          var offerItems = [
+            { id: 'le-male-elixir',           size: '50ml' },
+            { id: 'creed-silver-mountain-water', size: '50ml' },
+            { id: 'imperial-valley-qisah',     size: '50ml' }
+          ];
+          offerItems.forEach(function(item) {
+            var prod = (XNOTE.products || []).find(function(p){ return p.id === item.id; });
+            if (prod && XNOTE.cart && XNOTE.cart.add) {
+              XNOTE.cart.add(prod, item.size);
+            }
+          });
+          /* Confirmation feedback on button */
+          var btn = document.getElementById('offer-add-to-cart');
+          if (btn) {
+            btn.textContent = '✓ Bundle Added!';
+            btn.style.background = 'var(--gold)';
+            btn.style.color = 'var(--obsidian)';
+            setTimeout(function(){
+              btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> Add Bundle to Cart';
+              btn.style.background = '';
+              btn.style.color = '';
+            }, 2200);
+          }
+          /* Open cart panel */
+          if (XNOTE.ui && XNOTE.ui.openCart) XNOTE.ui.openCart();
+        }
+        </script>
 
         <!-- Floating WhatsApp Button -->
         <a href="https://wa.me/201000000000" class="wa-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp" id="wa-float-btn">

@@ -300,3 +300,14 @@
   fill: var(--gold);
   stroke: var(--gold);
 }
+
+/* Offers nav link — gold highlight */
+.nav__link--offers {
+  color: var(--gold) !important;
+  opacity: 1 !important;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+}
+.nav__link--offers::after {
+  background: var(--gold) !important;
+}
