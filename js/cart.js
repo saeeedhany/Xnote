@@ -20,7 +20,7 @@ XNOTE.cart = (function () {
     if (found) {
       found.qty = Math.min(found.qty + 1, 10);
     } else {
-      items.push({ key, id: bundle.id, size: 'Bundle', qty: 1, isBundle: true, bundlePrice: bundle.price, bundleName: bundle.name, bundleImage: bundle.image || null });
+      items.push({ key, id: bundle.id, size: 'Bundle', qty: 1, isBundle: true, bundlePrice: bundle.price, bundleName: bundle.name, bundleImage: bundle.bundleImage || null });
     }
     writeCart(items);
     _syncUI();
@@ -210,7 +210,7 @@ XNOTE.cart = (function () {
     container.innerHTML = items.map(function (item) {
       if (item.isBundle) {
         var imgHtml = item.bundleImage
-          ? '<img src="' + item.bundleImage + '" alt="' + item.bundleName + '" class="product-real-img" loading="lazy">'
+          ? '<img src="' + item.bundleImage + '" alt="' + item.bundleName + '" class="product-real-img" loading="lazy" onload="this.classList.add(\'loaded\')" onerror="this.style.display=\'none\';var ph=this.parentElement.querySelector(\'.product-placeholder-box\');if(ph)ph.classList.add(\'visible\');"><div class="product-placeholder-box"></div>'
           : '<div class="product-placeholder-box visible"></div>';
         return (
           '<div class="cart-item" data-key="' + item.key + '">' +

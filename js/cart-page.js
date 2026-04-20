@@ -45,7 +45,7 @@ window.renderPageCart = function() {
       var line = item.bundlePrice * item.qty;
       total += line;
       var imgHtml = item.bundleImage
-        ? '<img src="' + item.bundleImage + '" alt="' + item.bundleName + '" class="product-real-img" loading="lazy">'
+        ? '<img src="' + item.bundleImage + '" alt="' + item.bundleName + '" class="product-real-img" loading="lazy" onload="this.classList.add(\'loaded\')" onerror="this.style.display=\'none\';var ph=this.parentElement.querySelector(\'.product-placeholder-box\');if(ph)ph.classList.add(\'visible\');"><div class="product-placeholder-box"></div>'
         : '<div class="product-placeholder-box visible"></div>';
       return '<div class="cp-item" data-key="' + item.key + '">' +
         '<div class="cp-item__img">' + imgHtml + '</div>' +
