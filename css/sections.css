@@ -1192,46 +1192,51 @@ textarea.form-control {
 }
 
 /* ═══════════════════════════════════════════════
-   FLOATING WHATSAPP BUTTON
+   FLOATING WHATSAPP BUTTON — themed to X Note
 ════════════════════════════════════════════════ */
 .wa-float {
   position: fixed;
   bottom: 2rem;
   left: 2rem;
-  width: 56px;
-  height: 56px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  background: #25D366;
-  color: #fff;
+  background: var(--obsidian);
+  border: 1px solid var(--gold-dim);
+  color: var(--gold);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 999;
-  box-shadow: 0 4px 24px rgba(37,211,102,0.35);
-  transition: transform var(--t-med) var(--ease), box-shadow var(--t-med) var(--ease);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.6), 0 0 0 1px rgba(201,169,110,0.08);
+  transition: transform var(--t-med) var(--ease), box-shadow var(--t-med) var(--ease), border-color var(--t-med) var(--ease), background var(--t-med) var(--ease);
   text-decoration: none;
 }
 
 .wa-float:hover {
-  transform: scale(1.12);
-  box-shadow: 0 6px 32px rgba(37,211,102,0.5);
+  transform: scale(1.08);
+  background: var(--gold-glow);
+  border-color: var(--gold);
+  box-shadow: 0 6px 32px rgba(0,0,0,0.7), 0 0 20px rgba(201,169,110,0.15);
 }
 
 .wa-float svg {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   display: block;
 }
 
 .wa-float__tooltip {
   position: absolute;
-  left: 66px;
-  background: rgba(10,10,10,0.92);
+  left: 62px;
+  background: var(--surface, #111);
+  border: 1px solid var(--border-light);
   color: var(--ivory);
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
-  padding: 0.4rem 0.8rem;
-  border-radius: 4px;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.9rem;
+  border-radius: 2px;
   white-space: nowrap;
   pointer-events: none;
   opacity: 0;
