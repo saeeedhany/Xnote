@@ -12,6 +12,23 @@ XNOTE.cart = (function () {
   function writeCart(arr)  { localStorage.setItem(CART_KEY, JSON.stringify(arr)); }
   function writeWish(arr)  { localStorage.setItem(WISH_KEY, JSON.stringify(arr)); }
 
+  /* Bundle add */
+  function addBundleToCart(bundle) {
+    var key   = 'bundle|' + bundle.id;
+    var items = readCart();
+    var found = items.find(i => i.key === key);
+    if (found) {
+      found.qty = Math.min(found.qty + 1, 10);
+    } else {
+      items.push({ key, id: bundle.id, size: 'Bundle', qty: 1, isBundle: true, bundlePrice: bundle.price, bundleName: bundle.name, bundleImage: bundle.image || null });
+    }
+    writeCart(items);
+    _syncUI();
+    _refreshPageCartIfPresent();
+    XNOTE.ui.toast(bundle.name + ' added to cart');
+    _bump('[data-cart-count]');
+  }
+
   /* Cart operations */
   function addToCart(productId, sizeLabel, qty) {
     const product = XNOTE.products.find(p => p.id === productId);
@@ -91,6 +108,7 @@ XNOTE.cart = (function () {
   /* Totals */
   function getTotal() {
     return readCart().reduce(function (sum, item) {
+      if (item.isBundle) return sum + (item.bundlePrice * item.qty);
       var p = XNOTE.products.find(x => x.id === item.id);
       return sum + (p ? XNOTE.getPriceForSize(p, item.size) * item.qty : 0);
     }, 0);
@@ -98,6 +116,9 @@ XNOTE.cart = (function () {
 
   function getCartSummary() {
     return readCart().map(function (item) {
+      if (item.isBundle) {
+        return item.bundleName + ' (Bundle) x' + item.qty + ' = ' + XNOTE.formatPrice(item.bundlePrice * item.qty);
+      }
       var p = XNOTE.products.find(x => x.id === item.id);
       if (!p) return '';
       var price = XNOTE.getPriceForSize(p, item.size);
@@ -187,6 +208,29 @@ XNOTE.cart = (function () {
     }
 
     container.innerHTML = items.map(function (item) {
+      if (item.isBundle) {
+        var imgHtml = item.bundleImage
+          ? '<img src="' + item.bundleImage + '" alt="' + item.bundleName + '" class="product-real-img" loading="lazy">'
+          : '<div class="product-placeholder-box visible"></div>';
+        return (
+          '<div class="cart-item" data-key="' + item.key + '">' +
+            '<div class="cart-item__img">' + imgHtml + '</div>' +
+            '<div class="cart-item__info">' +
+              '<div class="cart-item__name">' + item.bundleName + '</div>' +
+              '<div class="cart-item__variant">Bundle · 3 fragrances</div>' +
+              '<div class="cart-item__qty">' +
+                '<button class="cart-item__qty-btn" onclick="XNOTE.cart.changeQty(\'' + item.key + '\',-1)">−</button>' +
+                '<span class="cart-item__qty-num">' + item.qty + '</span>' +
+                '<button class="cart-item__qty-btn" onclick="XNOTE.cart.changeQty(\'' + item.key + '\',1)">+</button>' +
+              '</div>' +
+            '</div>' +
+            '<div class="cart-item__actions">' +
+              '<span class="cart-item__price">' + XNOTE.formatPrice(item.bundlePrice * item.qty) + '</span>' +
+              '<button class="cart-item__remove" onclick="XNOTE.cart.removeFromCart(\'' + item.key + '\')">Remove</button>' +
+            '</div>' +
+          '</div>'
+        );
+      }
       var p = XNOTE.products.find(x => x.id === item.id);
       if (!p) return '';
       var price = XNOTE.getPriceForSize(p, item.size);
@@ -263,6 +307,7 @@ XNOTE.cart = (function () {
   return {
     init,
     addToCart,
+    addBundleToCart,
     removeFromCart,
     changeQty,
     clearCart,

@@ -41,6 +41,28 @@ window.renderPageCart = function() {
 
   var total = 0;
   listEl.innerHTML = items.map(function(item) {
+    if (item.isBundle) {
+      var line = item.bundlePrice * item.qty;
+      total += line;
+      var imgHtml = item.bundleImage
+        ? '<img src="' + item.bundleImage + '" alt="' + item.bundleName + '" class="product-real-img" loading="lazy">'
+        : '<div class="product-placeholder-box visible"></div>';
+      return '<div class="cp-item" data-key="' + item.key + '">' +
+        '<div class="cp-item__img">' + imgHtml + '</div>' +
+        '<div class="cp-item__info">' +
+          '<div class="cp-item__name">' + item.bundleName + '</div>' +
+          '<div class="cp-item__meta">Bundle · 3 fragrances &middot; ' + XNOTE.formatPrice(item.bundlePrice) + ' each</div>' +
+          '<div class="cp-item__qty">' +
+            '<button class="cp-qty-btn" onclick="XNOTE.cart.changeQty(\'' + item.key + '\',-1)">&#8722;</button>' +
+            '<span class="cp-qty-num">' + item.qty + '</span>' +
+            '<button class="cp-qty-btn" onclick="XNOTE.cart.changeQty(\'' + item.key + '\',1)">+</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="cp-item__right">' +
+          '<div class="cp-item__line-price">' + XNOTE.formatPrice(line) + '</div>' +
+          '<button class="cp-item__remove" onclick="XNOTE.cart.removeFromCart(\'' + item.key + '\')" aria-label="Remove">&#215;</button>' +
+        '</div></div>';
+    }
     var p = XNOTE.products.find(function(x) { return x.id === item.id; });
     if (!p) return '';
     var price = XNOTE.getPriceForSize(p, item.size);
@@ -89,6 +111,12 @@ function syncReceiptPreview() {
   var listEl = document.getElementById('receipt-items-list');
   if (!listEl) return;
   listEl.innerHTML = items.map(function(item) {
+    if (item.isBundle) {
+      return '<div class="receipt-item">' +
+        '<div class="receipt-item__name">' + item.bundleName + ' <span class="receipt-item__size">(Bundle)</span></div>' +
+        '<div class="receipt-item__price">' + item.qty + ' &times; ' + XNOTE.formatPrice(item.bundlePrice) + ' = <strong>' + XNOTE.formatPrice(item.bundlePrice * item.qty) + '</strong></div>' +
+      '</div>';
+    }
     var p = XNOTE.products.find(function(x) { return x.id === item.id; });
     if (!p) return '';
     var price = XNOTE.getPriceForSize(p, item.size);
@@ -149,6 +177,9 @@ function placeOrder() {
   var total  = _orderSubtotal + _shippingCost;
 
   var orderLines = items.map(function(item) {
+    if (item.isBundle) {
+      return item.bundleName + ' (Bundle) x' + item.qty + ' = ' + XNOTE.formatPrice(item.bundlePrice * item.qty);
+    }
     var p = XNOTE.products.find(function(x) { return x.id === item.id; });
     if (!p) return '';
     var price = XNOTE.getPriceForSize(p, item.size);

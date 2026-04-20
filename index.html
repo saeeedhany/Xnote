@@ -324,6 +324,7 @@
                     <div class="footer__links">
                         <a href="https://wa.me/XNOTE_WA" class="footer__link" target="_blank" rel="noopener">WhatsApp Enquiry</a>
                         <span class="footer__link">orders@xnote.co</span>
+                        <span class="footer__link">Ships worldwide</span>
                         <span class="footer__link">24h confirmation</span>
                     </div>
                 </div>
@@ -340,21 +341,19 @@
         <script>document.getElementById("footer-year").textContent=new Date().getFullYear();</script>
         <script>
         function XNOTE_addOfferToCart() {
-          var offerItems = [
-            { id: 'le-male-elixir',           size: '50ml' },
-            { id: 'creed-silver-mountain-water', size: '50ml' },
-            { id: 'imperial-valley-qisah',     size: '50ml' }
-          ];
-          offerItems.forEach(function(item) {
-            var prod = (XNOTE.products || []).find(function(p){ return p.id === item.id; });
-            if (prod && XNOTE.cart && XNOTE.cart.add) {
-              XNOTE.cart.add(prod, item.size);
-            }
-          });
+          var bundle = {
+            id:          'trilogy-bundle',
+            name:        'The Trilogy Bundle',
+            price:       900,
+            bundleImage: null   /* ← replace null with your bundle image path once ready */
+          };
+          if (XNOTE.cart && XNOTE.cart.addBundleToCart) {
+            XNOTE.cart.addBundleToCart(bundle);
+          }
           /* Confirmation feedback on button */
           var btn = document.getElementById('offer-add-to-cart');
           if (btn) {
-            btn.textContent = '✓ Bundle Added!';
+            btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16"><path d="M20 6L9 17l-5-5"/></svg> Bundle Added!';
             btn.style.background = 'var(--gold)';
             btn.style.color = 'var(--obsidian)';
             setTimeout(function(){
@@ -364,7 +363,7 @@
             }, 2200);
           }
           /* Open cart panel */
-          if (XNOTE.ui && XNOTE.ui.openCart) XNOTE.ui.openCart();
+          if (XNOTE.cart && XNOTE.cart.openPanel) XNOTE.cart.openPanel();
         }
         </script>
 
