@@ -144,6 +144,11 @@ XNOTE.products = [
       { label: '50ml', price: 350 },
     ],
     image: 'assets/images/main/Creed Mountain Water.webp',
+    featured: false,
+    isUnique: false,
+  },
+  {
+    id: 'aqua-celestia',
     name: 'Aqua Celestia',
     category: 'Fresh · Floral',
     categoryKey: 'floral',
